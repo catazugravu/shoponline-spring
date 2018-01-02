@@ -12,10 +12,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/")
 public class MainController {
 
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/")
     public String showComingSoon(){
         return "index";
     }
 
+    @GetMapping("/all")
+    public @ResponseBody Iterable<User> getAllUsers()
+    {
+        return userRepository.findAll();
+    }
 }
