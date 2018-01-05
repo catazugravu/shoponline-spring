@@ -2,7 +2,7 @@ package com.iquest.ShopOnline.Model;
 
 import javax.persistence.*;
 
-@javax.persistence.Entity
+@Entity
 @Table(name = "Users")
 public class User {
     @Id
@@ -17,6 +17,12 @@ public class User {
 
     @Column(name = "password_hash", nullable = false)
     private String password;
+
+    public User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
 
     public Integer getId() {
         return id;
