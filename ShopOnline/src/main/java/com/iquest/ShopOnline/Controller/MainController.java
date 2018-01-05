@@ -16,13 +16,8 @@ public class MainController {
     private UserRepository userRepository;
 
     @GetMapping("/")
-    public String showComingSoon(){
+    public String showComingSoon() {
         return "index";
     }
 
-    @GetMapping("/all")
-    public @ResponseBody Iterable<User> getAllUsers()
-    {
-        return userRepository.findAll();
-    }
 }
