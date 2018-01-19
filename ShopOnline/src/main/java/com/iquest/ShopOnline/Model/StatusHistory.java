@@ -12,12 +12,10 @@ public class StatusHistory implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id", nullable = false)
     private Order order;
-
-    @Id
+    
     @OneToOne
     @JoinColumn(name = "status_id", referencedColumnName = "id", nullable = false)
     private OrderStatus orderStatus;
