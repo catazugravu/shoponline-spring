@@ -12,8 +12,9 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(name = "user_id", nullable = false)
-    private Integer userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private User user;
 
     @Column(name = "delivery_address", nullable = false)
     private String deliveryAddress;
@@ -24,8 +25,8 @@ public class Order {
     protected Order() {
     }
 
-    public Order(Integer userId, String deliveryAddress, Date orderDate) {
-        this.userId = userId;
+    public Order(User user, String deliveryAddress, Date orderDate) {
+        this.user = user;
         this.deliveryAddress = deliveryAddress;
         this.orderDate = orderDate;
     }
@@ -38,12 +39,12 @@ public class Order {
         this.id = id;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getDeliveryAddress() {
