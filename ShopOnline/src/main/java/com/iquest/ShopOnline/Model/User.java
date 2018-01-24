@@ -18,6 +18,9 @@ public class User {
     @Column(name = "password_hash", nullable = false)
     private String password;
 
+    @OneToMany(mappedBy = "user")
+    private Set<Order> orders;
+
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
@@ -54,5 +57,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
 }
