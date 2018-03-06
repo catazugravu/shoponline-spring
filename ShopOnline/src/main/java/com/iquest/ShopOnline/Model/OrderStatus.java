@@ -5,42 +5,42 @@ import javax.persistence.*;
 @Entity
 @Table(name = "Order_status")
 public class OrderStatus {
-    @Id
+    @id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+    private Integer id;
 
     @Column(name = "status_name", nullable = false)
-    private String Name;
+    private String name;
 
     @Column(name = "status_description", nullable = false)
-    private String Description;
+    private String description;
 
     public OrderStatus(String name, String description) {
-        Name = name;
-        Description = description;
+        this.name = name;
+        this.description = description;
     }
 
     public Integer getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Integer id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     public void setDescription(String description) {
-        Description = description;
+        this.description = description;
     }
 }

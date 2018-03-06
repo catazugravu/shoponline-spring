@@ -5,30 +5,30 @@ import javax.persistence.*;
 @Entity
 @Table(name = "Category")
 public class Category {
-    @Id
+    @id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+    private Integer id;
 
     @Column(nullable = false)
-    private String Name;
+    private String name;
 
     public Category(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public Integer getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Integer id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 }
