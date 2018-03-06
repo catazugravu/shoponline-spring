@@ -29,9 +29,6 @@ public class Product {
     @Column(name = "image2_path", nullable = false)
     private String imgPath2;
 
-    protected Product() {
-    }
-
     public Product(String categoryId, String name, Double price, Integer stock, String imgPath1, String imgPath2) {
         this.categoryId = categoryId;
         this.name = name;
