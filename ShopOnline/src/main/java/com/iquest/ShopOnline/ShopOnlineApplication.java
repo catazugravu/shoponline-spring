@@ -1,4 +1,4 @@
-package com.iquest.ShopOnline;
+package com.iquest.shoponline;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

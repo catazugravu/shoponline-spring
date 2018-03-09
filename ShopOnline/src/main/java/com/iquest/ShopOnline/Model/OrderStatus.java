@@ -1,4 +1,4 @@
-package com.iquest.ShopOnline.Model;
+package com.iquest.shoponline.model;
 
 import javax.persistence.*;
 

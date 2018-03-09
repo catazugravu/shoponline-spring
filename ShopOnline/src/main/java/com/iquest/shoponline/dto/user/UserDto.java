@@ -1,34 +1,20 @@
-package com.iquest.shoponline.model;
+package com.iquest.shoponline.dto.user;
 
-import javax.persistence.*;
-import java.util.Set;
-
-@Entity
-@Table(name = "Users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class UserDto {
     private Integer id;
-
-    @Column(nullable = false)
     private String name;
-
-    @Column(nullable = false)
     private String email;
-
-    @Column(name = "password_hash", nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "user")
-    private Set<Order> orders;
 
-    public User(){
-
-    }
-    public User(String name, String email, String password) {
+    public UserDto(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public UserDto() {
+
     }
 
     public Integer getId() {
@@ -63,11 +49,4 @@ public class User {
         this.password = password;
     }
 
-    public Set<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(Set<Order> orders) {
-        this.orders = orders;
-    }
 }

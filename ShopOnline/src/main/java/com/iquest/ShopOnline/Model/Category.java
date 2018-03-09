@@ -1,6 +1,8 @@
-package com.iquest.ShopOnline.Model;
+package com.iquest.shoponline.model;
+
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "Category")
@@ -12,9 +14,9 @@ public class Category {
     @Column(nullable = false)
     private String name;
 
-    public Category(String name) {
-        this.name = name;
-    }
+
+    @OneToMany(mappedBy = "category")
+    Set<Product> products;
 
     public Integer getId() {
         return id;
@@ -30,5 +32,13 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
     }
 }

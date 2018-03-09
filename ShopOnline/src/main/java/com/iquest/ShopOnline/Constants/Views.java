@@ -1,5 +1,6 @@
-package com.iquest.ShopOnline.Constants;
+package com.iquest.shoponline.constants;
 
 public class Views {
     public static final String MAIN_PAGE = "index";
+    public static final String LOGIN_PAGE = "login";
 }

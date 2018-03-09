@@ -1,36 +1,14 @@
-package com.iquest.shoponline.model;
+package com.iquest.shoponline.dto.product;
 
+public class ProductDto {
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "Products")
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
-
-    @Column(nullable = false)
+    private String categoryId;
     private String name;
-
-    @Column(nullable = false)
     private Double price;
-
-    @Column(nullable = false)
     private Integer stock;
-
-    @Column(name = "image1_path", nullable = false)
     private String imgPath1;
-
-    @Column(name = "image2_path", nullable = false)
     private String imgPath2;
-
-    public Product() {
-    }
 
     public Integer getId() {
         return id;
@@ -40,13 +18,14 @@ public class Product {
         this.id = id;
     }
 
-    public Category getCategory() {
-        return category;
+    public String getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
+
     public String getName() {
         return name;
     }
@@ -86,4 +65,5 @@ public class Product {
     public void setImgPath2(String imgPath2) {
         this.imgPath2 = imgPath2;
     }
+
 }

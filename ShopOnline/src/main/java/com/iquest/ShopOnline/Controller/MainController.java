@@ -1,7 +1,10 @@
-package com.iquest.ShopOnline.Controller;
+package com.iquest.shoponline.controller;
 
-import com.iquest.ShopOnline.Constants.Views;
+import com.iquest.shoponline.constants.Views;
+import com.iquest.shoponline.services.CategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -9,8 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/")
 public class MainController {
 
+    @Autowired
+    CategoryService categoryService;
+
     @GetMapping("/")
-    public String showComingSoon() {
+    public String showMain(Model model) {
+        model.addAttribute("categories", categoryService.findAll());
         return Views.MAIN_PAGE;
     }
 
