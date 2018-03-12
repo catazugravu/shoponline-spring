@@ -1,4 +1,4 @@
-package com.iquest.ShopOnline;
+package com.iquest.shoponline;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
