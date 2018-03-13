@@ -1,6 +1,5 @@
-package com.iquest.ShopOnline.Model;
+package com.iquest.shoponline.model;
 
-import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -9,7 +8,7 @@ import java.sql.Date;
 @Table(name = "Orders")
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne
