@@ -23,14 +23,14 @@ public class Product {
     @Column(nullable = false)
     private Integer stock;
 
+    @Column(nullable = false)
+    private String description;
+
     @Column(name = "image1_path", nullable = false)
     private String imgPath1;
 
     @Column(name = "image2_path", nullable = false)
     private String imgPath2;
-
-    public Product() {
-    }
 
     public Integer getId() {
         return id;
@@ -47,6 +47,7 @@ public class Product {
     public void setCategory(Category category) {
         this.category = category;
     }
+
     public String getName() {
         return name;
     }
@@ -69,6 +70,14 @@ public class Product {
 
     public void setStock(Integer stock) {
         this.stock = stock;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getImgPath1() {
