@@ -2,112 +2,113 @@ DROP DATABASE IF EXISTS `online_shop`;
 CREATE DATABASE `online_shop`;
 USE online_shop;
 
-
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `password_hash` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-DROP TABLE IF EXISTS `orders`;
-CREATE TABLE `orders` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `delivery_address` varchar(45) NOT NULL,
-  `order_date` date NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK_users_orders_idx` (`user_id`),
-  CONSTRAINT `FK_users_orders` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-
-DROP TABLE IF EXISTS `category`;
-CREATE TABLE `category` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-
-DROP TABLE IF EXISTS `products`;
-CREATE TABLE `products` (
-  `id` int(11) NOT NULL,
-  `category_id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `price` varchar(45) NOT NULL,
-  `stock` varchar(45) NOT NULL,
-  `description` varchar(100) NOT NULL,
-  `image1_path` varchar(300) NOT NULL,
-  `image2_path` varchar(300) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK_category_products_idx` (`category_id`),
-  CONSTRAINT `FK_category_products` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`name` varchar(50) NOT NULL,
+	`email` varchar(50) NOT NULL,
+	`password_hash` varchar(50) NOT NULL,
+	PRIMARY KEY (`id`)
+);
 
 DROP TABLE IF EXISTS `cart`;
 CREATE TABLE `cart` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `order_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK_orders_cart_idx` (`order_id`),
-  constraint `FK_orders_order_id` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`user_id` INT(11) NOT NULL,
+	`created_date` DATE NOT NULL,
+	PRIMARY KEY (`id`)
+);
 
+DROP TABLE IF EXISTS `cart_item`;
+CREATE TABLE `cart_item` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`cart_id` INT(11) NOT NULL,
+	`product_id` INT(11) NOT NULL,
+	`quantity` INT(11) NOT NULL,
+	PRIMARY KEY (`id`)
+);
 
-DROP TABLE IF EXISTS `cart_products`;
-CREATE TABLE `cart_products` (
-  `product_id` int(11) NOT NULL,
-  `cart_id` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL,
-  KEY `FK_cartProducts_cart_idx` (`cart_id`),
-  KEY `FK_cartProducts_products` (`product_id`),
-  CONSTRAINT `FK_cartProducts_cart` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`id`),
-  CONSTRAINT `FK_cartProducts_products` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+DROP TABLE IF EXISTS `product`;
+CREATE TABLE `product` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`category_id` INT(11) NOT NULL,
+	`name` varchar(50) NOT NULL,
+	`price` DECIMAL NOT NULL,
+	`stock` INT(11) NOT NULL,
+	`description` varchar(50) NOT NULL,
+	`image1_path` varchar(50) NOT NULL,
+	`image2_path` varchar(50) NOT NULL,
+	PRIMARY KEY (`id`)
+);
 
+DROP TABLE IF EXISTS `order`;
+CREATE TABLE `order` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`user_id` INT(11) NOT NULL,
+	`delivery_address` varchar(50) NOT NULL,
+	`order_date` DATE NOT NULL,
+	`order_status` INT(11) NOT NULL,
+	PRIMARY KEY (`id`)
+);
 
-DROP TABLE IF EXISTS `order_status`;
-CREATE TABLE `order_status` (
-  `id` int(11) NOT NULL,
-  `status_name` varchar(45) NOT NULL,
-  `status_description` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+DROP TABLE IF EXISTS `order_item`;
+CREATE TABLE `order_item` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`order_id` INT(11) NOT NULL,
+	`product_id` INT(11) NOT NULL,
+	`quantity` INT(11) NOT NULL,
+	PRIMARY KEY (`id`)
+);
 
-DROP TABLE IF EXISTS `status_history`;
-CREATE TABLE `status_history` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `order_id` int(11) NOT NULL,
-  `status_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK_orders_statusHistory_idx` (`order_id`),
-  KEY `FK_orderStatus_statusHistory_idx` (`status_id`),
-  CONSTRAINT `FK_orderStatus_statusHistory` FOREIGN KEY (`status_id`) REFERENCES `order_status` (`id`),
-  CONSTRAINT `FK_orders_statusHistory` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+DROP TABLE IF EXISTS `category`;
+CREATE TABLE `category` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`name` varchar(50) NOT NULL,
+	PRIMARY KEY (`id`)
+);
 
-LOCK TABLES `users` WRITE;
-INSERT INTO `users` VALUES (1,'ovidiu','ovidiu.cracea@iquestgroup.com','ovidiu.cracea'),
-						   (2,'ioana','ioana.diaconu@iquestgroup.com','ioana.diaconu'),
-                           (3,'daniel','ursu.daniel2202d@gmail.com','ursu.daniel'),
-                           (4,'catalin','crisan.gheorghecatalin@gmail.com','catalin.crisan'),
-                           (5,'colea','nicolaelungu8@gmail.com','colea.lungu');
+ALTER TABLE `cart` ADD CONSTRAINT `cart_fk0` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`);
+
+ALTER TABLE `cart_item` ADD CONSTRAINT `cart_item_fk0` FOREIGN KEY (`cart_id`) REFERENCES `cart`(`id`);
+
+ALTER TABLE `cart_item` ADD CONSTRAINT `cart_item_fk1` FOREIGN KEY (`product_id`) REFERENCES `product`(`id`);
+
+ALTER TABLE `product` ADD CONSTRAINT `product_fk0` FOREIGN KEY (`category_id`) REFERENCES `category`(`id`);
+
+ALTER TABLE `order` ADD CONSTRAINT `order_fk0` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`);
+
+ALTER TABLE `order_item` ADD CONSTRAINT `order_item_fk0` FOREIGN KEY (`order_id`) REFERENCES `order`(`id`);
+
+ALTER TABLE `order_item` ADD CONSTRAINT `order_item_fk1` FOREIGN KEY (`product_id`) REFERENCES `product`(`id`);
+
+LOCK TABLES `user` WRITE;
+
+INSERT INTO `user`(name, email, password_hash) 
+VALUES ('ovidiu','ovidiu.cracea@iquestgroup.com','ovidiu.cracea'),
+
+	('ioana','ioana.diaconu@iquestgroup.com','ioana.diaconu'),
+	(
+'daniel','ursu.daniel2202d@gmail.com','ursu.daniel'),
+	(
+'catalin','crisan.gheorghecatalin@gmail.com','catalin.crisan'),
+	(
+'colea','nicolaelungu8@gmail.com','colea.lungu');
+	
 UNLOCK TABLES;
 
+LOCK TABLES `product` WRITE;
+
+INSERT INTO `product` (category_id, name, price, stock, description, image1_path, image2_path) 
+VALUES (1,'Samsung Galaxy S7',800 , 100 , '5.5"' , 'https://s7d2.scene7.com/is/image/SamsungUS/SMG930_gs7_102416?$product-details-jpg$' , 'https://s0emagst.akamaized.net/products/3093/3092917/images/res_ab4739016196fe30ef776c4fe1372fef_full.jpg'),
+	(1,'iPhone 7',700 , 100 , '5.6"' ,'https://store.storeimages.cdn-apple.com/4974/as-images.apple.com/is/image/AppleInc/aos/published/images/i/ph/iphone7/rosegold/iphone7-rosegold-select-2016?wid=470&hei=556&fmt=png-alpha&qlt=95&.v=1472430205982' , 'https://store.storeimages.cdn-apple.com/4974/as-images.apple.com/is/image/AppleInc/aos/published/images/i/ph/iphone7/plus/iphone7-plus-rosegold-select-2016?wid=1200&hei=630&fmt=jpeg&qlt=95&op_sharpen=0&resMode=bicub&op_usm=0.5,0.5,0,0&iccEmbed=0&layer=comp&.v=1472430147951'),
+	(2,'HP Pavilion All In One PC - 27"',1500 , 50 , 'All-in-One' , 'http://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c05184015.png' , 'https://images-na.ssl-images-amazon.com/images/I/81ZEo80zoZL._SL1500_.jpg'),
+	(2,'Apple iMac 21.5"',2500 , 25 , 'All-in-One' ,'https://i.ebayimg.com/images/g/htcAAOSwBq1ZlI2C/s-l300.jpg' , 'https://www.encore-pc.co.uk/media/catalog/product/i/m/imac_a1311-1112.jpg');
+
+UNLOCK TABLES;
 
 LOCK TABLES `category` WRITE;
-INSERT INTO `category` VALUES (1,'phones'),
-							  (2,'computers');
-UNLOCK TABLES;
 
-
-LOCK TABLES `products` WRITE;
-INSERT INTO `products` VALUES (1,1,'samsung galaxy s7','800' , '100' , '5.5"' , 'https://s7d2.scene7.com/is/image/SamsungUS/SMG930_gs7_102416?$product-details-jpg$' , 'https://s0emagst.akamaized.net/products/3093/3092917/images/res_ab4739016196fe30ef776c4fe1372fef_full.jpg'),
-							  (2,1,'ihpone 7','700' , '100' , '5.6"' ,'https://store.storeimages.cdn-apple.com/4974/as-images.apple.com/is/image/AppleInc/aos/published/images/i/ph/iphone7/rosegold/iphone7-rosegold-select-2016?wid=470&hei=556&fmt=png-alpha&qlt=95&.v=1472430205982' , 'https://store.storeimages.cdn-apple.com/4974/as-images.apple.com/is/image/AppleInc/aos/published/images/i/ph/iphone7/plus/iphone7-plus-rosegold-select-2016?wid=1200&hei=630&fmt=jpeg&qlt=95&op_sharpen=0&resMode=bicub&op_usm=0.5,0.5,0,0&iccEmbed=0&layer=comp&.v=1472430147951'),
-                              (3,2,'HP Pavilion All In One PC - 27"','1500' , '50' , 'All-in-One' , 'http://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c05184015.png' , 'https://images-na.ssl-images-amazon.com/images/I/81ZEo80zoZL._SL1500_.jpg'),
-                              (4,2,'Apple iMac 21.5"','2500' , '25' , 'All-in-One' ,'https://i.ebayimg.com/images/g/htcAAOSwBq1ZlI2C/s-l300.jpg' , 'https://www.encore-pc.co.uk/media/catalog/product/i/m/imac_a1311-1112.jpg');
+INSERT INTO `category`(name) 
+VALUES ('phones'),
+	('computers');	
 UNLOCK TABLES;
