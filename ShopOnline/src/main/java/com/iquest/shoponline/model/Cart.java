@@ -21,7 +21,7 @@ public class Cart {
 
     @Column(nullable = false)
     @Type(type = "timestamp")
-    private Date createDate;
+    private Date createdDate;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "cart")
     private Set<CartItem> items = new HashSet<>();
@@ -43,11 +43,11 @@ public class Cart {
     }
 
     public Date getCreateDate() {
-        return createDate;
+        return createdDate;
     }
 
     public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+        this.createdDate = createDate;
     }
 
     public Set<CartItem> getItems() {
