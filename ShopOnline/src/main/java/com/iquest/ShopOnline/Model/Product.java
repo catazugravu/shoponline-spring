@@ -32,6 +32,8 @@ public class Product {
     @Column(name = "image2_path", nullable = false)
     private String imgPath2;
 
+    public Product() {}
+
     public Integer getId() {
         return id;
     }

@@ -28,6 +28,8 @@ public class Order {
     @Column(name = "order_status", nullable = false)
     private Integer orderStatus;
 
+    public Order(){}
+
     public Order(User user, String deliveryAddress, Date orderDate, Integer orderStatus) {
         this.user = user;
         this.deliveryAddress = deliveryAddress;
