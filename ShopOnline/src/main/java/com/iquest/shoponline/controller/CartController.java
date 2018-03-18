@@ -22,7 +22,7 @@ public class CartController {
 
     @GetMapping("/{id}")
     public String getCart(@PathVariable("id") Integer cartId, Model model) {
-        List<CartItemDto> cartItems = cartService.getItemsForCart(1);
+        List<CartItemDto> cartItems = cartService.getItemsForCart(cartId);
         model.addAttribute("cartItems", cartService.getItemsForCart(cartId));
         model.addAttribute("cartId", cartId);
         model.addAttribute("cartItem", new CartItemDto());
