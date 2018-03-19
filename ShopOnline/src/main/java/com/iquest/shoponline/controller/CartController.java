@@ -43,8 +43,7 @@ public class CartController {
 
     @PostMapping("/{productId}")
     public String insertItemToCart(@PathVariable("productId") Integer productId, HttpServletRequest request) {
-        Object obj = request.getSession().getAttribute(SessionAttributes.SESSION_USER);
-        UserDto user = (obj instanceof UserDto ? (UserDto) obj : null);
+        UserDto user = (UserDto) request.getSession().getAttribute(SessionAttributes.SESSION_USER);
         if (user != null) {
             cartService.insertProductWith(user, productId);
         }
