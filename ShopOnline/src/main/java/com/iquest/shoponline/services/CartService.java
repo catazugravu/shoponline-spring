@@ -52,6 +52,7 @@ public class CartService {
             CartItem item = cartItemRepository.findByCartIdAndProductId(cart.getId(), productId);
             if (item != null) {
                 item.setQuantity(item.getQuantity() + 1);
+                cartItemRepository.save(item);
             } else {
                 CartItem cartItem = create(productId, cart);
                 cartItemRepository.save(cartItem);
