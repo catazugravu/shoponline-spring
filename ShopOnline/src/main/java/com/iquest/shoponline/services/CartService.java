@@ -1,5 +1,6 @@
 package com.iquest.shoponline.services;
 
+import com.iquest.shoponline.dto.cart.CartDto;
 import com.iquest.shoponline.dto.cartItem.CartItemDto;
 import com.iquest.shoponline.dto.user.UserDto;
 import com.iquest.shoponline.model.Cart;
@@ -68,8 +69,31 @@ public class CartService {
         return cartItem;
     }
 
-    public List<CartItemDto> getItemsForCart(Integer cartId) {
-        List<CartItem> cartItems = cartItemRepository.findAllByCart_Id(cartId);
+    public CartDto getCartForUser(Integer userId) {
+        Cart cart = cartRepository.findFirstCartByUserId(userId);
+
+        if (cart != null) {
+            CartDto cartDto = new CartDto();
+            cartDto.setId(cart.getId());
+            return cartDto;
+        }
+
+        return null;
+    }
+
+    public void updateUserCart(CartDto cartDto) {
+        for (CartItemDto itemDto : cartDto.getItems()) {
+            CartItem item = new CartItem();
+            item.setId(itemDto.getId());
+            item.setQuantity(itemDto.getQuantity());
+            item.setProduct(cartItemRepository.findCartItemById(itemDto.getId()).getProduct());
+            item.setCart(cartItemRepository.findCartItemById(itemDto.getId()).getCart());
+            cartItemRepository.save(item);
+        }
+    }
+
+    public List<CartItemDto> getCartItemsForUser(Integer userId) {
+        List<CartItem> cartItems = cartItemRepository.findAllByCart_UserId(userId);
         List<CartItemDto> dtos = new ArrayList<>();
         cartItems.forEach(item -> populateDto(dtos, item));
         return dtos;

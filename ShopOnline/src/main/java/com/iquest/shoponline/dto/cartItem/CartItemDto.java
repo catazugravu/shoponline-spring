@@ -1,11 +1,11 @@
 package com.iquest.shoponline.dto.cartItem;
 
 public class CartItemDto {
-    public Integer id;
-    public String name;
-    public Double price;
-    public Integer quantity;
 
+    private Integer id;
+    private String name;
+    private Double price;
+    private Integer quantity;
 
     public Integer getId() {
         return id;

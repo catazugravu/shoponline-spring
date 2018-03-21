@@ -2,6 +2,7 @@ package com.iquest.shoponline.controller;
 
 import com.iquest.shoponline.constants.SessionAttributes;
 import com.iquest.shoponline.constants.Views;
+import com.iquest.shoponline.dto.cart.CartDto;
 import com.iquest.shoponline.dto.cartItem.CartItemDto;
 import com.iquest.shoponline.dto.user.UserDto;
 import com.iquest.shoponline.services.CartService;
@@ -20,12 +21,20 @@ public class CartController {
     @Autowired
     CartService cartService;
 
-    @GetMapping("/{id}")
-    public String getCart(@PathVariable("id") Integer cartId, Model model) {
-        List<CartItemDto> cartItems = cartService.getItemsForCart(cartId);
-        model.addAttribute("cartItems", cartService.getItemsForCart(cartId));
-        model.addAttribute("cartId", cartId);
-        model.addAttribute("cartItem", new CartItemDto());
+    @GetMapping("/")
+    public String getCart(Model model, HttpServletRequest request) {
+        UserDto user = (UserDto) request.getSession().getAttribute(SessionAttributes.SESSION_USER);
+        if (user != null) {
+            CartDto cartDto = cartService.getCartForUser(user.getId());
+            if (cartDto != null) {
+                cartDto.setItems(cartService.getCartItemsForUser(user.getId()));
+            } else {
+                cartDto = new CartDto();
+            }
+            model.addAttribute("cart", cartDto);
+            model.addAttribute("cartItem", new CartItemDto());
+        }
+
         return Views.CART_PAGE;
     }
 
