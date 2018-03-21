@@ -38,41 +38,49 @@
 </div>
 
 <div class="container">
-    <table class="table table-striped table-bordered">
-        <thead class="thead-dark">
-        <tr>
-            <th scope="col">Product</th>
-            <th scope="col">Quantity</th>
-            <th scope="col">Price/Unit</th>
-            <th scope="col"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach items="${cartItems}" var="item">
+    <c:if test="${empty cart.items}">
+        <div class="alert alert-warning text-center" role="alert">
+            No products in cart :(
+        </div>
+    </c:if>
+    <c:if test="${not empty cart.items}">
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
             <tr>
-                <td>${item.name}</td>
-                <td>
-                    <form:form modelAttribute="cartItem" action="/cart/${cartId}/item/${item.id}" method="post" class="text-center">
-                        <form:select path="quantity" class="custom-select custom-select-lg mb-3"
-                                     onchange="this.form.submit()">
-                            <option value="${item.quantity}" selected hidden>${item.quantity}</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                        </form:select>
-
-                    </form:form>
-                </td>
-                <td>${item.price} RON</td>
-                <td>
-                    <form:form action="cart/${cartId}/item/${item.id}" method="delete">
-                        <button type="submit" class="btn btn-danger btn-lg">Remove</button>
-                    </form:form>
-                </td>
+                <th scope="col">Product</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price/Unit</th>
+                <th scope="col"></th>
             </tr>
-        </c:forEach>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            <c:forEach items="${cart.items}" var="item">
+                <tr>
+                    <td>${item.name}</td>
+                    <td>
+                        <form:form modelAttribute="cartItem" action="/cart/${cartId}/item/${item.id}" method="post"
+                                   class="text-center">
+                            <form:select path="quantity" class="custom-select custom-select-lg mb-3"
+                                         onchange="this.form.submit()">
+                                <option value="${item.quantity}" selected hidden>${item.quantity}</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                            </form:select>
+
+                        </form:form>
+                    </td>
+                    <td>${item.price} RON</td>
+                    <td>
+                        <form:form action="cart/${cartId}/item/${item.id}" method="delete">
+                            <button type="submit" class="btn btn-danger btn-lg">Remove</button>
+                        </form:form>
+                    </td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+    </c:if>
 
     <footer class="pt-4 my-md-5 pt-md-5 border-top">
         <div class="row">
