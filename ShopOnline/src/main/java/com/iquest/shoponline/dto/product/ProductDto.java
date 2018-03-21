@@ -3,8 +3,8 @@ package com.iquest.shoponline.dto.product;
 public class ProductDto {
 
     private Integer id;
-    private String categoryId;
     private String name;
+    private String description;
     private Double price;
     private Integer stock;
     private String imgPath1;
@@ -18,20 +18,20 @@ public class ProductDto {
         this.id = id;
     }
 
-    public String getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(String categoryId) {
-        this.categoryId = categoryId;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Double getPrice() {
