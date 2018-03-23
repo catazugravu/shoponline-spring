@@ -2,8 +2,8 @@ DROP DATABASE IF EXISTS `online_shop`;
 CREATE DATABASE `online_shop`;
 USE online_shop;
 
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user` (
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`name` varchar(50) NOT NULL,
 	`email` varchar(50) NOT NULL,
@@ -19,8 +19,8 @@ CREATE TABLE `cart` (
 	PRIMARY KEY (`id`)
 );
 
-DROP TABLE IF EXISTS `cart_item`;
-CREATE TABLE `cart_item` (
+DROP TABLE IF EXISTS `cart_items`;
+CREATE TABLE `cart_items` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`cart_id` INT(11) NOT NULL,
 	`product_id` INT(11) NOT NULL,
@@ -28,8 +28,8 @@ CREATE TABLE `cart_item` (
 	PRIMARY KEY (`id`)
 );
 
-DROP TABLE IF EXISTS `product`;
-CREATE TABLE `product` (
+DROP TABLE IF EXISTS `products`;
+CREATE TABLE `products` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`category_id` INT(11) NOT NULL,
 	`name` varchar(50) NOT NULL,
@@ -67,23 +67,23 @@ CREATE TABLE `category` (
 	PRIMARY KEY (`id`)
 );
 
-ALTER TABLE `cart` ADD CONSTRAINT `cart_fk0` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`);
+ALTER TABLE `cart` ADD CONSTRAINT `cart_fk0` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`);
 
-ALTER TABLE `cart_item` ADD CONSTRAINT `cart_item_fk0` FOREIGN KEY (`cart_id`) REFERENCES `cart`(`id`);
+ALTER TABLE `cart_items` ADD CONSTRAINT `cart_items_fk0` FOREIGN KEY (`cart_id`) REFERENCES `cart`(`id`);
 
-ALTER TABLE `cart_item` ADD CONSTRAINT `cart_item_fk1` FOREIGN KEY (`product_id`) REFERENCES `product`(`id`);
+ALTER TABLE `cart_items` ADD CONSTRAINT `cart_items_fk1` FOREIGN KEY (`product_id`) REFERENCES `products`(`id`);
 
-ALTER TABLE `product` ADD CONSTRAINT `product_fk0` FOREIGN KEY (`category_id`) REFERENCES `category`(`id`);
+ALTER TABLE `products` ADD CONSTRAINT `products_fk0` FOREIGN KEY (`category_id`) REFERENCES `category`(`id`);
 
-ALTER TABLE `order` ADD CONSTRAINT `order_fk0` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`);
+ALTER TABLE `order` ADD CONSTRAINT `order_fk0` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`);
 
 ALTER TABLE `order_item` ADD CONSTRAINT `order_item_fk0` FOREIGN KEY (`order_id`) REFERENCES `order`(`id`);
 
-ALTER TABLE `order_item` ADD CONSTRAINT `order_item_fk1` FOREIGN KEY (`product_id`) REFERENCES `product`(`id`);
+ALTER TABLE `order_item` ADD CONSTRAINT `order_item_fk1` FOREIGN KEY (`product_id`) REFERENCES `products`(`id`);
 
-LOCK TABLES `user` WRITE;
+LOCK TABLES `users` WRITE;
 
-INSERT INTO `user`(name, email, password_hash) 
+INSERT INTO `users`(name, email, password_hash) 
 VALUES ('ovidiu','ovidiu.cracea@iquestgroup.com','ovidiu.cracea'),
 
 	('ioana','ioana.diaconu@iquestgroup.com','ioana.diaconu'),
@@ -96,9 +96,9 @@ VALUES ('ovidiu','ovidiu.cracea@iquestgroup.com','ovidiu.cracea'),
 	
 UNLOCK TABLES;
 
-LOCK TABLES `product` WRITE;
+LOCK TABLES `products` WRITE;
 
-INSERT INTO `product` (category_id, name, price, stock, description, image1_path, image2_path) 
+INSERT INTO `products` (category_id, name, price, stock, description, image1_path, image2_path) 
 VALUES (1,'Samsung Galaxy S7',800 , 100 , '5.5"' , 'https://s7d2.scene7.com/is/image/SamsungUS/SMG930_gs7_102416?$product-details-jpg$' , 'https://s0emagst.akamaized.net/products/3093/3092917/images/res_ab4739016196fe30ef776c4fe1372fef_full.jpg'),
 	(1,'iPhone 7',700 , 100 , '5.6"' ,'https://store.storeimages.cdn-apple.com/4974/as-images.apple.com/is/image/AppleInc/aos/published/images/i/ph/iphone7/rosegold/iphone7-rosegold-select-2016?wid=470&hei=556&fmt=png-alpha&qlt=95&.v=1472430205982' , 'https://store.storeimages.cdn-apple.com/4974/as-images.apple.com/is/image/AppleInc/aos/published/images/i/ph/iphone7/plus/iphone7-plus-rosegold-select-2016?wid=1200&hei=630&fmt=jpeg&qlt=95&op_sharpen=0&resMode=bicub&op_usm=0.5,0.5,0,0&iccEmbed=0&layer=comp&.v=1472430147951'),
 	(2,'HP Pavilion All In One PC - 27"',1500 , 50 , 'All-in-One' , 'http://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c05184015.png' , 'https://images-na.ssl-images-amazon.com/images/I/81ZEo80zoZL._SL1500_.jpg'),
