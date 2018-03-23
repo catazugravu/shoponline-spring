@@ -16,7 +16,7 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
-    @GetMapping("/")
+    @GetMapping
     public String getProductList(Model model) {
         model.addAttribute("products", productService.findAll());
         return Views.PRODUCT_PAGE;

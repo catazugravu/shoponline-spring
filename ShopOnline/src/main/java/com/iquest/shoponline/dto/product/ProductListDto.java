@@ -4,6 +4,7 @@ public class ProductListDto {
 
     private Integer id;
     private String name;
+    private String description;
     private Double price;
     private String imgPath1;
 
@@ -21,6 +22,14 @@ public class ProductListDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Double getPrice() {
