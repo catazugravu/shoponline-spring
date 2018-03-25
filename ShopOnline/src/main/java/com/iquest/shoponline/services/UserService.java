@@ -19,7 +19,7 @@ public class UserService {
         if (model == null) {
             return Optional.empty();
         } else {
-            UserDto userDto = new UserDto(model.getName(), model.getEmail(), model.getPassword());
+            UserDto userDto = new UserDto(model.getName(), model.getEmail(), model.getPassword(), null);
             userDto.setId(model.getId());
             return Optional.of(userDto);
         }

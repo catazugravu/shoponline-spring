@@ -4,6 +4,7 @@ import com.iquest.shoponline.constants.SessionAttributes;
 import com.iquest.shoponline.constants.Views;
 import com.iquest.shoponline.dto.ErrorDto;
 import com.iquest.shoponline.dto.cart.CartDto;
+import com.iquest.shoponline.dto.cartItem.CartItemDto;
 import com.iquest.shoponline.dto.user.UserDto;
 import com.iquest.shoponline.services.CartService;
 import com.iquest.shoponline.services.UserService;
@@ -29,7 +30,12 @@ public class UserController {
     CartService cartService;
 
     @GetMapping("/login")
-    public String login(Model model) {
+    public String login(Model model, HttpServletRequest request) {
+        UserDto userDto = (UserDto) request.getSession().getAttribute(SessionAttributes.SESSION_USER);
+        if (userDto != null && userDto.getId() != null) {
+            return "redirect:/";
+        }
+
         model.addAttribute("loginFormUser", new UserDto());
         return Views.LOGIN_PAGE;
     }
@@ -41,9 +47,18 @@ public class UserController {
             UserDto userDto = user.get();
             CartDto cart = cartService.getCartForUser(userDto.getId());
 
-            if (cart == null) {
-                cart = (CartDto) request.getSession().getAttribute(SessionAttributes.SESSION_CART);
+            UserDto sessionUser = (UserDto) request.getSession().getAttribute(SessionAttributes.SESSION_USER);
+            if (sessionUser != null) {
+                if (cart != null) {
+                    CartDto sessionCart = sessionUser.getCartDto();
+                    for (CartItemDto item : sessionCart.getItems()) {
+                        cart.addItem(item);
+                    }
+                } else {
+                    cart = sessionUser.getCartDto();
+                }
             }
+
             userDto.setCartDto(cart);
 
             request.getSession().setAttribute(SessionAttributes.SESSION_USER, userDto);
@@ -51,14 +66,14 @@ public class UserController {
         } else {
             model.addAttribute("error", new ErrorDto("00001", "Username or password are invalid."));
             return Views.LOGIN_PAGE;
-
         }
 
     }
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request) {
-        cartService.updateUserCart((CartDto) request.getSession().getAttribute(SessionAttributes.SESSION_CART));
+        UserDto sessionUser = (UserDto) request.getSession().getAttribute(SessionAttributes.SESSION_USER);
+        cartService.updateUserCart(sessionUser.getCartDto(), sessionUser.getId());
         return "redirect:/";
     }
 }
