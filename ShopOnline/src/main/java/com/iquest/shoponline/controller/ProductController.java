@@ -18,13 +18,23 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
+    @Autowired
+    CategoryService categoryService;
+
     @GetMapping
     public String getProductList(Model model) {
         model.addAttribute("products", productService.findAll());
         return Views.PRODUCT_PAGE;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{categoryId}")
+    public String getProductsFromCategory(@PathVariable("categoryId") Integer categoryId, Model model) {
+        model.addAttribute("category_name", categoryService.getCategoryName(categoryId));
+        model.addAttribute("products", productService.findProductsFromCategory(categoryId));
+        return Views.PRODUCT_PAGE;
+    }
+
+    @GetMapping("/{categoryId}/{id}")
     public String getProduct(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("product", productService.getProductById(id));
         return Views.PRODUCT_INFO_PAGE;

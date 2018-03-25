@@ -35,7 +35,7 @@
                     <ul class="list-unstyled mt-3 mb-4">
                         <li>bla bla category description</li>
                     </ul>
-                    <button type="button" class="btn btn-lg btn-block btn-light">See products</button>
+                    <button type="button" class="btn btn-lg btn-block btn-light" onclick="location.href='products/${category.id}'">See products</button>
                 </div>
             </div>
         </c:forEach>

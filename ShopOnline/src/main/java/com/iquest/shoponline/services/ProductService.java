@@ -23,9 +23,18 @@ public class ProductService {
         return dtos;
     }
 
+    public List<ProductListDto> findProductsFromCategory(Integer categoryId) {
+        List<Product> products = productRepository.findAllByCategoryId(categoryId);
+        List<ProductListDto> dtos = new ArrayList<>();
+        products.forEach(product -> populateDto(dtos, product));
+        return dtos;
+    }
+
     private void populateDto(List<ProductListDto> dtos, Product product) {
         ProductListDto dto = new ProductListDto();
+
         dto.setId(product.getId());
+        dto.setCategoryId(product.getCategory().getId());
         dto.setName(product.getName());
         dto.setDescription(product.getDescription());
         dto.setPrice(product.getPrice());

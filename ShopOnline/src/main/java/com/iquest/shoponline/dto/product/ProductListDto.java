@@ -3,6 +3,7 @@ package com.iquest.shoponline.dto.product;
 public class ProductListDto {
 
     private Integer id;
+    private Integer categoryId;
     private String name;
     private String description;
     private Double price;
@@ -14,6 +15,14 @@ public class ProductListDto {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getName() {

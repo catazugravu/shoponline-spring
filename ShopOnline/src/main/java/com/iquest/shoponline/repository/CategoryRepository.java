@@ -8,4 +8,6 @@ public interface CategoryRepository extends CrudRepository<Category, Integer> {
 
     @Query("select count(id) from Product p where p.category.id = ?1")
     int countProductsInCategory(Integer categoryId);
+
+    Category findFirstById(Integer id);
 }

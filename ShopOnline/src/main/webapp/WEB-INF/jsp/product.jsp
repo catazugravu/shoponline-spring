@@ -20,6 +20,8 @@
 
 <jsp:include page="header.jsp"></jsp:include>
 
+<h1 class="text-center pb-5">${category_name}</h1>
+
 <div class="container">
     <c:forEach items="${products}" var="product">
         <div class="row bg-light border h-100 justify-content-center align-items-center mb-5">
@@ -34,7 +36,9 @@
             </div>
             <div class="col-xs-1">
                 <div class="row">
-                    <button class="btn btn-info btn-sm" onclick="location.href='product/${product.id}'">Show product</button>
+                    <button class="btn btn-info btn-sm"
+                            onclick="location.href='/products/${product.categoryId}/${product.id}'">Show product
+                    </button>
                 </div>
                 <div class="row">
                     <div class="col-xs-6"><strong>Price: $${product.price}</strong></div>
