@@ -5,10 +5,10 @@
     <h5 class="my-0 mr-md-auto font-weight-normal">iQuest - Advanced Frameworks - 2018</h5>
     <nav class="my-2 my-md-0 mr-md-3"><a class="p-2 text-dark" href="/cart/">Cart()</a></nav>
 
-    <c:if test="${empty sessionUser}">
+    <c:if test="${empty sessionUser.id}">
         <a class="btn btn-outline-primary" href="/user/login">Login</a>
     </c:if>
-    <c:if test="${not empty sessionUser}">
+    <c:if test="${not empty sessionUser.id}">
         <h6>Welcome ${sessionUser.name}</h6>
         <a class="btn btn-outline-primary" href="/user/logout">Logout</a>
     </c:if>
