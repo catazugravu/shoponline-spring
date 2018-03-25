@@ -6,6 +6,7 @@ public class CartItemDto {
     private String name;
     private Double price;
     private Integer quantity;
+    private Integer productId;
 
     public Integer getId() {
         return id;
@@ -37,5 +38,13 @@ public class CartItemDto {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
     }
 }

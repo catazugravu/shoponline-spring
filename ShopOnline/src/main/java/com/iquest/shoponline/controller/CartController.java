@@ -6,13 +6,13 @@ import com.iquest.shoponline.dto.cart.CartDto;
 import com.iquest.shoponline.dto.cartItem.CartItemDto;
 import com.iquest.shoponline.dto.user.UserDto;
 import com.iquest.shoponline.services.CartService;
+import com.iquest.shoponline.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Controller
 @RequestMapping("/cart")
@@ -21,16 +21,20 @@ public class CartController {
     @Autowired
     CartService cartService;
 
-    @GetMapping("/")
+    @Autowired
+    ProductService productService;
+
+    @GetMapping
     public String getCart(Model model, HttpServletRequest request) {
-        UserDto user = (UserDto) request.getSession().getAttribute(SessionAttributes.SESSION_USER);
-        if (user != null) {
-            CartDto cartDto = cartService.getCartForUser(user.getId());
-            if (cartDto != null) {
-                cartDto.setItems(cartService.getCartItemsForUser(user.getId()));
-            } else {
-                cartDto = new CartDto();
+        UserDto userSession = (UserDto) request.getSession().getAttribute(SessionAttributes.SESSION_USER);
+        if (userSession != null) {
+            CartDto cartDto = userSession.getCartDto();
+
+            Integer userId = userSession.getId();
+            if (userId != null) {
+                cartService.updateUserCart(cartDto, userId);
             }
+
             model.addAttribute("cart", cartDto);
             model.addAttribute("cartItem", new CartItemDto());
         }
@@ -38,31 +42,48 @@ public class CartController {
         return Views.CART_PAGE;
     }
 
-    @DeleteMapping("/{id}/item/{itemId}")
-    public String deleteItemFromCart(@PathVariable("id") Integer cartId, @PathVariable("itemId") Integer itemId) {
-        cartService.deleteItemFromCart(cartId, itemId);
-        return Views.CART_PAGE;
-    }
+    @DeleteMapping("/{productId}")
+    public String deleteItemFromCart(@PathVariable("productId") Integer productId, HttpServletRequest request) {
+        UserDto userSession = (UserDto) request.getSession().getAttribute(SessionAttributes.SESSION_USER);
+        if (userSession.getId() != null) {
+            cartService.deleteItemFromDBCart(userSession.getId(), productId);
+        } else {
+            cartService.deleteItemFromCartSession(userSession.getCartDto(), productId);
+        }
 
-    @DeleteMapping("/{id}")
-    public String deleteCart(@PathVariable("id") Integer cartId) {
-        cartService.deleteCart(cartId);
         return Views.CART_PAGE;
     }
 
     @PostMapping("/{productId}")
-    public String insertItemToCart(@PathVariable("productId") Integer productId, HttpServletRequest request) {
+    public String insertItemToCart(@PathVariable("productId") Integer productId, Model model, HttpServletRequest request) {
         UserDto user = (UserDto) request.getSession().getAttribute(SessionAttributes.SESSION_USER);
-        if (user != null) {
-            cartService.insertProductWith(user, productId);
+        if (user == null) {
+            user = new UserDto();
+            request.getSession().setAttribute(SessionAttributes.SESSION_USER, user);
         }
-        return "redirect:/";
+
+        CartDto cartDto = user.getCartDto();
+        if (cartDto == null) {
+            cartDto = new CartDto();
+            user.setCartDto(cartDto);
+        }
+
+        cartService.addCartItemTo(cartDto, productId);
+
+        model.addAttribute("product", productService.getProductById(productId));
+        return Views.PRODUCT_INFO_PAGE;
     }
 
-    @PostMapping("/{id}/item/{itemId}")
-    public String updateCartItem(@PathVariable("id") Integer cartId, @PathVariable("itemId") Integer itemId, @ModelAttribute("cartItem") CartItemDto cartItemDto) {
-        cartService.updateItemQuantity(cartItemDto.getQuantity(), cartId, itemId);
+    @PostMapping("/update/{productId}")
+    public String updateCartItem(@PathVariable("productId") Integer productId, @ModelAttribute("cartItem") CartItemDto cartItemDto, HttpServletRequest request) {
+        UserDto userSession = (UserDto) request.getSession().getAttribute(SessionAttributes.SESSION_USER);
+        if (userSession != null) {
+            CartDto cartDto = userSession.getCartDto();
+            if (cartDto != null) {
+                cartService.updateItemQuantityFor(cartDto, cartItemDto.getProductId(), cartItemDto.getQuantity());
+            }
+        }
 
-        return "redirect:/cart/" + cartId;
+        return "redirect:/cart/";
     }
 }

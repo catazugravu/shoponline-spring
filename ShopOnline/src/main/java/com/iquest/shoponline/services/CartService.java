@@ -5,6 +5,8 @@ import com.iquest.shoponline.dto.cartItem.CartItemDto;
 import com.iquest.shoponline.dto.user.UserDto;
 import com.iquest.shoponline.model.Cart;
 import com.iquest.shoponline.model.CartItem;
+import com.iquest.shoponline.model.Product;
+import com.iquest.shoponline.model.User;
 import com.iquest.shoponline.repository.CartItemRepository;
 import com.iquest.shoponline.repository.CartRepository;
 import com.iquest.shoponline.repository.ProductRepository;
@@ -31,42 +33,30 @@ public class CartService {
     @Autowired
     UserRepository userRepository;
 
-    public void updateItemQuantity(Integer quantity, Integer cartId, Integer itemId) {
-        CartItem item = cartItemRepository.findByIdAndCartId(itemId, cartId);
-        if (item != null) {
-            item.setQuantity(quantity);
-            cartItemRepository.save(item);
-        }
-    }
-
-    public void insertProductWith(UserDto user, Integer productId) {
-        Cart cart = cartRepository.findFirstCartByUserId(user.getId());
-        if (cart == null) {
-            cart = new Cart();
-            cart.setCreatedDate(new Date());
-            cart.setUser(userRepository.findOne(user.getId()));
-            cart = cartRepository.save(cart);
-
-            CartItem cartItem = create(productId, cart);
-            cartItemRepository.save(cartItem);
-        } else {
-            CartItem item = cartItemRepository.findByCartIdAndProductId(cart.getId(), productId);
-            if (item != null) {
-                item.setQuantity(item.getQuantity() + 1);
-                cartItemRepository.save(item);
-            } else {
-                CartItem cartItem = create(productId, cart);
-                cartItemRepository.save(cartItem);
+    public void updateItemQuantityFor(CartDto cart, Integer productId, Integer quantity) {
+        for (CartItemDto item : cart.getItems()) {
+            if (item.getProductId() == productId) {
+                item.setQuantity(quantity);
             }
         }
     }
 
-    private CartItem create(Integer productId, Cart cart) {
-        CartItem cartItem = new CartItem();
-        cartItem.setCart(cart);
-        cartItem.setProduct(productRepository.findOne(productId));
-        cartItem.setQuantity(1);
-        return cartItem;
+    public void addCartItemTo(CartDto cart, Integer productId) {
+        Product product = productRepository.findFirstById(productId);
+
+        for (CartItemDto item : cart.getItems()) {
+            if (item.getProductId() == product.getId()) {
+                item.setQuantity(item.getQuantity() + 1);
+                return;
+            }
+        }
+
+        CartItemDto cartItemDto = new CartItemDto();
+        cartItemDto.setName(product.getName());
+        cartItemDto.setPrice(product.getPrice());
+        cartItemDto.setQuantity(1);
+        cartItemDto.setProductId(product.getId());
+        cart.addItem(cartItemDto);
     }
 
     public CartDto getCartForUser(Integer userId) {
@@ -75,45 +65,73 @@ public class CartService {
         if (cart != null) {
             CartDto cartDto = new CartDto();
             cartDto.setId(cart.getId());
+
+            List<CartItemDto> cartItemList = new ArrayList<>();
+            for (CartItem item : cart.getItems()) {
+                CartItemDto cartItemDto = new CartItemDto();
+                cartItemDto.setId(item.getId());
+                cartItemDto.setName(item.getProduct().getName());
+                cartItemDto.setPrice(item.getProduct().getPrice());
+                cartItemDto.setQuantity(item.getQuantity());
+
+                cartItemList.add(cartItemDto);
+            }
+            cartDto.setItems(cartItemList);
+
             return cartDto;
         }
 
         return null;
     }
 
-    public void updateUserCart(CartDto cartDto) {
+    public void updateUserCart(CartDto cartDto, Integer userId) {
         for (CartItemDto itemDto : cartDto.getItems()) {
-            CartItem item = new CartItem();
-            item.setId(itemDto.getId());
-            item.setQuantity(itemDto.getQuantity());
-            item.setProduct(cartItemRepository.findCartItemById(itemDto.getId()).getProduct());
-            item.setCart(cartItemRepository.findCartItemById(itemDto.getId()).getCart());
-            cartItemRepository.save(item);
+            Product product;
+            if (itemDto.getId() != null) {
+                product = cartItemRepository.findCartItemById(itemDto.getId()).getProduct();
+            } else {
+                product = productRepository.findFirstById(itemDto.getProductId());
+            }
+
+            Cart cart = cartRepository.findFirstCartByUserId(userId);
+            if (cart == null) {
+                cart = new Cart();
+                cart.setUser(userRepository.findOne(userId));
+                cart.setCreatedDate(new Date());
+                cart = cartRepository.save(cart);
+            }
+
+            if (cartItemRepository.findByCartIdAndProductId(cart.getId(), product.getId()) != null) {
+                cartItemRepository.update(itemDto.getQuantity(), cart, product);
+            } else {
+                CartItem item = new CartItem();
+                item.setId(itemDto.getId());
+                item.setQuantity(itemDto.getQuantity());
+                item.setProduct(product);
+                item.setCart(cart);
+
+                cartItemRepository.save(item);
+            }
         }
     }
 
-    public List<CartItemDto> getCartItemsForUser(Integer userId) {
-        List<CartItem> cartItems = cartItemRepository.findAllByCart_UserId(userId);
-        List<CartItemDto> dtos = new ArrayList<>();
-        cartItems.forEach(item -> populateDto(dtos, item));
-        return dtos;
+    public void deleteItemFromCartSession(CartDto cart, Integer productId) {
+        List<CartItemDto> items = cart.getItems();
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getProductId() == productId) {
+                items.remove(i);
+                return;
+            }
+        }
     }
 
-    private void populateDto(List<CartItemDto> dtos, CartItem item) {
-        CartItemDto dto = new CartItemDto();
-        dto.setId(item.getId());
-        dto.setName(productRepository.findNameById(item.getProduct().getId()));
-        dto.setPrice(productRepository.findPriceById(item.getProduct().getId()));
-        dto.setQuantity(item.getQuantity());
-        dtos.add(dto);
+    public void deleteItemFromDBCart(Integer userId, Integer productId) {
+        Cart cart = cartRepository.findFirstCartByUserId(userId);
+        if (cart != null) {
+            CartItem item = cartItemRepository.findByCartIdAndProductId(cart.getId(), productId);
+            if (item != null) {
+                cartItemRepository.delete(item);
+            }
+        }
     }
-
-    public void deleteItemFromCart(Integer cartId, Integer itemId) {
-        cartItemRepository.deleteByIdAndCartId(itemId, cartId);
-    }
-
-    public void deleteCart(Integer cartId) {
-        cartRepository.delete(cartId);
-    }
-
 }
