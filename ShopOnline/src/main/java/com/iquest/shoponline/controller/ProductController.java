@@ -2,7 +2,9 @@ package com.iquest.shoponline.controller;
 
 import com.iquest.shoponline.constants.Views;
 import com.iquest.shoponline.dto.product.ProductDto;
+import com.iquest.shoponline.model.Category;
 import com.iquest.shoponline.model.Product;
+import com.iquest.shoponline.services.CategoryService;
 import com.iquest.shoponline.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,7 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/product")
+@RequestMapping("/products")
 public class ProductController {
 
     @Autowired
@@ -39,7 +41,7 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public String getProduct(@PathVariable("id") Integer id) {
         productService.deleteProduct(id);
-        return "redirect:product/";
+        return "redirect:products/";
     }
 
 }
