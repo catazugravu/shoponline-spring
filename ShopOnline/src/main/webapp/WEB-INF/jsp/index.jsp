@@ -1,5 +1,4 @@
 <%@ taglib prefix='c' uri='http://java.sun.com/jsp/jstl/core' %>
-<c:set var="sessionUser" value="${sessionScope.sessionUser }"/>
 <!doctype html>
 <html lang="en">
 <head>
@@ -12,6 +11,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css"
+          integrity="sha384-3AB7yXWz4OeoZcPbieVW64vVXEwADiYyAEhwilzWsLw+9FgqpyjjStpPnpBO8o8S" crossorigin="anonymous">
     <link rel="stylesheet" href="../../resources/css/style.css">
 </head>
 
@@ -35,7 +36,9 @@
                     <ul class="list-unstyled mt-3 mb-4">
                         <li>bla bla category description</li>
                     </ul>
-                    <button type="button" class="btn btn-lg btn-block btn-light" onclick="location.href='products/${category.id}'">See products</button>
+                    <button type="button" class="btn btn-lg btn-block btn-light"
+                            onclick="location.href='products/${category.id}'">See products
+                    </button>
                 </div>
             </div>
         </c:forEach>
