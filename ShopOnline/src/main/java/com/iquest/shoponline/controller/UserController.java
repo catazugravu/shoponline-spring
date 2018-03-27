@@ -74,6 +74,8 @@ public class UserController {
     public String logout(HttpServletRequest request) {
         UserDto sessionUser = (UserDto) request.getSession().getAttribute(SessionAttributes.SESSION_USER);
         cartService.updateUserCart(sessionUser.getCartDto(), sessionUser.getId());
+        request.getSession().setAttribute(SessionAttributes.SESSION_USER, null);
+
         return "redirect:/";
     }
 }
