@@ -22,6 +22,14 @@ public class CartItem implements Serializable {
     @Column(nullable = false)
     private Integer quantity;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public Product getProduct() {
         return product;
     }

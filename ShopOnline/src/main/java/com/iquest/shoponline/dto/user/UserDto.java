@@ -1,16 +1,20 @@
 package com.iquest.shoponline.dto.user;
 
+import com.iquest.shoponline.dto.cart.CartDto;
+
 public class UserDto {
     private Integer id;
     private String name;
     private String email;
     private String password;
+    private CartDto cartDto;
 
 
-    public UserDto(String name, String email, String password) {
+    public UserDto(String name, String email, String password, CartDto cartDto) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.cartDto = cartDto;
     }
 
     public UserDto() {
@@ -48,5 +52,14 @@ public class UserDto {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public CartDto getCartDto() {
+        return cartDto;
+    }
+
+    public void setCartDto(CartDto cartDto) {
+        this.cartDto = cartDto;
+    }
+
 
 }
