@@ -74,31 +74,31 @@
             </tbody>
         </table>
 
-        <div class="row justify-content-md-center mt-5">
-            <form:form modelAttribute="addressForm" action="/cart/checkout" method="post">
-                <div class="col-sm-12">
-                    <div class="input-group mb-5">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">Delivery address <i class="fas fa-globe pl-2"></i></span>
-                        </div>
-                        <form:input path="address" type="text" class="form-control" aria-label="Your delivery address"
-                                    placeholder="Please enter your address" required="required"/>
+        <div class="row mt-5">
+            <div class="col-sm-12 col-md-6 offset-md-3">
+                <form:form modelAttribute="addressForm" action="/cart/checkout" method="post">
+                <div class="input-group mb-5">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-globe"></i></span>
                     </div>
+                    <form:input path="address" type="text" class="form-control"
+                                placeholder="Please enter your delivery address" required="required"/>
                 </div>
+            </div>
 
-                <div class="col-sm-12 col-md-4">
-                    <c:if test="${not empty sessionUser.id}">
-                        <button class="btn btn-success btn-lg btn-block" type="submit">
-                            Checkout <i class="fas fa-shipping-fast pd-2"></i>
-                        </button>
-                    </c:if>
-                    <c:if test="${empty sessionUser.id}">
-                        <button class="btn btn-success btn-lg btn-block" onclick="location.href='/user/login'">
-                            Checkout <i class="fas fa-shipping-fast pd-2"></i>
-                        </button>
-                    </c:if>
-                </div>
-            </form:form>
+            <div class="col-sm-12 col-md-4 offset-md-4">
+                <c:if test="${not empty sessionUser.id}">
+                    <button class="btn btn-success btn-lg btn-block" type="submit">
+                        Checkout <i class="fas fa-shipping-fast pd-2"></i>
+                    </button>
+                </c:if>
+                <c:if test="${empty sessionUser.id}">
+                    <button class="btn btn-success btn-lg btn-block" onclick="location.href='/user/login'">
+                        Checkout <i class="fas fa-shipping-fast pd-2"></i>
+                    </button>
+                </c:if>
+                </form:form>
+            </div>
         </div>
     </c:if>
 </div>
