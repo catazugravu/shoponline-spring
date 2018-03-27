@@ -23,7 +23,7 @@
 
 <div class="container">
     <div class="card text-white bg-success mb-3 mx-auto text-center" style="max-width: 18rem;">
-        <div class="card-header">Hoorday!</div>
+        <div class="card-header">Hooray!</div>
         <div class="card-body">
             <h5 class="card-title">Order placed successfully</h5>
             <p class="card-text  pt-5 pb-5"><i class="fas fa-smile display-1"></i></p>

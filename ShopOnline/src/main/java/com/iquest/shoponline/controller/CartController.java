@@ -31,16 +31,18 @@ public class CartController {
         if (userSession != null) {
             CartDto cartDto = userSession.getCartDto();
 
-            Integer userId = userSession.getId();
-            if (userId != null) {
-                cartService.updateUserCart(cartDto, userId);
-            }
+            if (cartDto != null) {
+                Integer userId = userSession.getId();
+                if (userId != null) {
+                    cartService.updateUserCart(cartDto, userId);
+                }
 
-            double total = cartDto.getItems().stream().mapToDouble(cartItem -> cartItem.getQuantity() * cartItem.getPrice()).sum();
-            model.addAttribute("total", total);
-            model.addAttribute("cart", cartDto);
-            model.addAttribute("addressForm", new UserAddressDto());
-            model.addAttribute("cartItem", new CartItemDto());
+                double total = cartDto.getItems().stream().mapToDouble(cartItem -> cartItem.getQuantity() * cartItem.getPrice()).sum();
+                model.addAttribute("total", total);
+                model.addAttribute("cart", cartDto);
+                model.addAttribute("addressForm", new UserAddressDto());
+                model.addAttribute("cartItem", new CartItemDto());
+            }
         }
 
         return Views.CART_PAGE;
@@ -59,6 +61,7 @@ public class CartController {
             }
         }
 
+        userSession.setCartDto(new CartDto());
         return Views.ORDER_SUCCESSFUL;
     }
 
