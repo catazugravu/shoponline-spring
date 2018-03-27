@@ -28,4 +28,8 @@ public class CategoryService {
         dto.setProductCount(repository.countProductsInCategory(category.getId()));
         dtos.add(dto);
     }
+
+    public String getCategoryName(Integer id) {
+        return repository.findFirstById(id).getName().toUpperCase();
+    }
 }

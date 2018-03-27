@@ -17,11 +17,16 @@
 </head>
 
 <body>
+
+<jsp:include page="header.jsp"></jsp:include>
+
+<h1 class="text-center pb-5">${category_name}</h1>
+
 <div class="container">
     <c:forEach items="${products}" var="product">
-        <div class="row bg-light border h-100 justify-content-center align-items-center">
+        <div class="row bg-light border h-100 justify-content-center align-items-center mb-5">
             <div class="d-none d-sm-block col-sm-3 col-md-2">
-                <img src="${product.imgPath1}">
+                <img src="http://placehold.it/550x550" class="img-fluid">
             </div>
             <div class="col-xs-12 col-sm-5 col-md-7 d-flex justify-content-center justify-content-sm-start">
                 <div class="caption">
@@ -31,10 +36,12 @@
             </div>
             <div class="col-xs-1">
                 <div class="row">
-                    <button class="btn btn-info btn-sm">Show product</button>
+                    <button class="btn btn-info btn-sm"
+                            onclick="location.href='/products/${product.categoryId}/${product.id}'">Show product
+                    </button>
                 </div>
                 <div class="row">
-                    <div class="col-xs-6"><strong>Price: ${product.price}</strong></div>
+                    <div class="col-xs-6"><strong>Price: $${product.price}</strong></div>
                 </div>
             </div>
         </div>
@@ -42,15 +49,6 @@
 </div>
 
 
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
-
+<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>
