@@ -1,6 +1,5 @@
 <%@ taglib prefix='c' uri='http://java.sun.com/jsp/jstl/core' %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<c:set var="sessionUser" value="${sessionScope.sessionUser }"/>
 <!doctype html>
 <html lang="en">
 <head>
@@ -17,20 +16,7 @@
 </head>
 
 <body>
-
-<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-    <h5 class="my-0 mr-md-auto font-weight-normal">iQuest - Advanced Frameworks - 2018</h5>
-    <nav class="my-2 my-md-0 mr-md-3"><a class="p-2 text-dark" href="#">Cart()</a></nav>
-
-    <c:if test="${empty sessionUser}">
-        <a class="btn btn-outline-primary" href="/user/login">Login</a>
-    </c:if>
-    <c:if test="${not empty sessionUser}">
-        <h6>Welcome ${sessionUser.name}</h6>
-        <a class="btn btn-outline-primary" href="/user/logout">Logout</a>
-    </c:if>
-
-</div>
+<jsp:include page="header.jsp"></jsp:include>
 
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <h1 class="display-4">Online Shop</h1>
@@ -58,7 +44,7 @@
                 <tr>
                     <td>${item.name}</td>
                     <td>
-                        <form:form modelAttribute="cartItem" action="/cart/${cartId}/item/${item.id}" method="post"
+                        <form:form modelAttribute="cartItem" action="/cart/update/${item.productId}" method="post"
                                    class="text-center">
                             <form:select path="quantity" class="custom-select custom-select-lg mb-3"
                                          onchange="this.form.submit()">
@@ -72,7 +58,7 @@
                     </td>
                     <td>${item.price} RON</td>
                     <td>
-                        <form:form action="cart/${cartId}/item/${item.id}" method="delete">
+                        <form:form action="/cart/${item.productId}" method="delete">
                             <button type="submit" class="btn btn-danger btn-lg">Remove</button>
                         </form:form>
                     </td>
