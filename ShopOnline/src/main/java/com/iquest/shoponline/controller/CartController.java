@@ -35,6 +35,8 @@ public class CartController {
                 cartService.updateUserCart(cartDto, userId);
             }
 
+            double total =  cartDto.getItems().stream().mapToDouble(cartItem -> cartItem.getQuantity()*cartItem.getPrice()).sum();
+            model.addAttribute("total", total);
             model.addAttribute("cart", cartDto);
             model.addAttribute("cartItem", new CartItemDto());
         }
@@ -47,11 +49,12 @@ public class CartController {
         UserDto userSession = (UserDto) request.getSession().getAttribute(SessionAttributes.SESSION_USER);
         if (userSession.getId() != null) {
             cartService.deleteItemFromDBCart(userSession.getId(), productId);
+            userSession.setCartDto(cartService.getCartForUser(userSession.getId()));
         } else {
             cartService.deleteItemFromCartSession(userSession.getCartDto(), productId);
         }
 
-        return Views.CART_PAGE;
+        return "redirect:/" + Views.CART_PAGE;
     }
 
     @PostMapping("/{productId}")

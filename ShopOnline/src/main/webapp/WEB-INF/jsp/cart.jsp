@@ -66,6 +66,10 @@
                     </td>
                 </tr>
             </c:forEach>
+            <tr>
+                <td class="col-md-auto font-weight-bold" colspan="2">Total</td>
+                <td>${total} RON</td>
+            </tr>
             </tbody>
         </table>
     </c:if>

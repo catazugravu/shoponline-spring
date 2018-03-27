@@ -93,6 +93,8 @@ public class CartService {
                 product = productRepository.findFirstById(itemDto.getProductId());
             }
 
+            itemDto.setProductId(product.getId());
+
             Cart cart = cartRepository.findFirstCartByUserId(userId);
             if (cart == null) {
                 cart = new Cart();
