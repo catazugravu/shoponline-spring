@@ -1,5 +1,6 @@
 <%@ taglib prefix='c' uri='http://java.sun.com/jsp/jstl/core' %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<c:set var="sessionUser" value="${sessionScope.sessionUser}"/>
 <!doctype html>
 <html lang="en">
 <head>
@@ -72,25 +73,37 @@
             </tr>
             </tbody>
         </table>
-    </c:if>
 
-    <footer class="pt-4 my-md-5 pt-md-5 border-top">
-        <div class="row">
-            <div class="col-12 col-md">
-                <small class="d-block mb-3 text-muted">&copy;2018</small>
-            </div>
-            <div class="col-6 col-md">
-                <h5>Products</h5>
-                <ul class="list-unstyled text-small">
-                    <li><a class="text-muted" href="#">All products</a></li>
-                    <li><a class="text-muted" href="#">Best sellers</a></li>
-                    <li><a class="text-muted" href="#">New arrivals</a></li>
-                </ul>
-            </div>
+        <div class="row justify-content-md-center mt-5">
+            <form:form modelAttribute="addressForm" action="/cart/checkout" method="post">
+                <div class="col-sm-12">
+                    <div class="input-group mb-5">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Delivery address <i class="fas fa-globe pl-2"></i></span>
+                        </div>
+                        <form:input path="address" type="text" class="form-control" aria-label="Your delivery address"
+                                    placeholder="Please enter your address" required="required"/>
+                    </div>
+                </div>
 
+                <div class="col-sm-12 col-md-4">
+                    <c:if test="${not empty sessionUser.id}">
+                        <button class="btn btn-success btn-lg btn-block" type="submit">
+                            Checkout <i class="fas fa-shipping-fast pd-2"></i>
+                        </button>
+                    </c:if>
+                    <c:if test="${empty sessionUser.id}">
+                        <button class="btn btn-success btn-lg btn-block" onclick="location.href='/user/login'">
+                            Checkout <i class="fas fa-shipping-fast pd-2"></i>
+                        </button>
+                    </c:if>
+                </div>
+            </form:form>
         </div>
-    </footer>
+    </c:if>
 </div>
+
+<jsp:include page="footer.jsp"></jsp:include>
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

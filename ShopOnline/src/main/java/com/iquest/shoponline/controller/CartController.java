@@ -4,6 +4,7 @@ import com.iquest.shoponline.constants.SessionAttributes;
 import com.iquest.shoponline.constants.Views;
 import com.iquest.shoponline.dto.cart.CartDto;
 import com.iquest.shoponline.dto.cartItem.CartItemDto;
+import com.iquest.shoponline.dto.user.UserAddressDto;
 import com.iquest.shoponline.dto.user.UserDto;
 import com.iquest.shoponline.services.CartService;
 import com.iquest.shoponline.services.ProductService;
@@ -35,13 +36,30 @@ public class CartController {
                 cartService.updateUserCart(cartDto, userId);
             }
 
-            double total =  cartDto.getItems().stream().mapToDouble(cartItem -> cartItem.getQuantity()*cartItem.getPrice()).sum();
+            double total = cartDto.getItems().stream().mapToDouble(cartItem -> cartItem.getQuantity() * cartItem.getPrice()).sum();
             model.addAttribute("total", total);
             model.addAttribute("cart", cartDto);
+            model.addAttribute("addressForm", new UserAddressDto());
             model.addAttribute("cartItem", new CartItemDto());
         }
 
         return Views.CART_PAGE;
+    }
+
+    @PostMapping("/checkout")
+    public String checkout(@ModelAttribute("addressForm") UserAddressDto userAddressDto, HttpServletRequest request) {
+        UserDto userSession = (UserDto) request.getSession().getAttribute(SessionAttributes.SESSION_USER);
+        if (userSession != null) {
+            CartDto cartDto = userSession.getCartDto();
+
+            Integer userId = userSession.getId();
+            if (userId != null) {
+                cartService.updateUserCart(cartDto, userId);
+                cartService.createOrderFor(userId, userAddressDto.getAddress());
+            }
+        }
+
+        return Views.ORDER_SUCCESSFUL;
     }
 
     @DeleteMapping("/{productId}")
@@ -58,7 +76,8 @@ public class CartController {
     }
 
     @PostMapping("/{productId}")
-    public String insertItemToCart(@PathVariable("productId") Integer productId, Model model, HttpServletRequest request) {
+    public String insertItemToCart(@PathVariable("productId") Integer productId, Model model, HttpServletRequest
+            request) {
         UserDto user = (UserDto) request.getSession().getAttribute(SessionAttributes.SESSION_USER);
         if (user == null) {
             user = new UserDto();
@@ -78,7 +97,8 @@ public class CartController {
     }
 
     @PostMapping("/update/{productId}")
-    public String updateCartItem(@PathVariable("productId") Integer productId, @ModelAttribute("cartItem") CartItemDto cartItemDto, HttpServletRequest request) {
+    public String updateCartItem(@PathVariable("productId") Integer
+                                         productId, @ModelAttribute("cartItem") CartItemDto cartItemDto, HttpServletRequest request) {
         UserDto userSession = (UserDto) request.getSession().getAttribute(SessionAttributes.SESSION_USER);
         if (userSession != null) {
             CartDto cartDto = userSession.getCartDto();
