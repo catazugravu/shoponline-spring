@@ -8,12 +8,10 @@ import com.iquest.shoponline.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -41,5 +39,38 @@ public class UserController {
 
         }
 
+    }
+
+    @GetMapping("/create")
+    public String createUser(Model model) {
+        model.addAttribute("userDto" , new UserDto());
+        return Views.CREATE_USER_PAGE;
+    }
+
+    @PostMapping("/create")
+    public String createUser(@ModelAttribute("userDto") UserDto userDto, HttpServletRequest request){
+        userService.create(userDto);
+        request.getSession().setAttribute(SessionAttributes.SESSION_USER, userDto);
+        return "redirect:/";
+    }
+
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public void updateUser(@PathVariable UserDto userDto) {
+        userService.update(userDto);
+    }
+
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
+    public void deleteUser(@PathVariable Integer id) {
+        userService.delete(id);
+    }
+
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public List<UserDto> getAllUsers() {
+        return userService.findAll();
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public UserDto getUser(@PathVariable Integer id) {
+        return userService.findOne(id);
     }
 }

@@ -1,16 +1,27 @@
 package com.iquest.shoponline.dto.user;
 
+import com.iquest.shoponline.model.Order;
+
+import java.util.Set;
+
 public class UserDto {
     private Integer id;
     private String name;
     private String email;
     private String password;
+    private Set<Order> orders;
 
 
     public UserDto(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public UserDto(String name, String email, Set<Order> orders) {
+        this.name = name;
+        this.email = email;
+        this.orders = orders;
     }
 
     public UserDto() {
@@ -47,6 +58,14 @@ public class UserDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
 
 }

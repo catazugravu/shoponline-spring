@@ -6,6 +6,8 @@ import com.iquest.shoponline.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,5 +28,30 @@ public class UserService {
     public void create(UserDto dto) {
         User model = new User(dto.getName(), dto.getEmail(), dto.getPassword());
         repository.save(model);
+    }
+
+    public UserDto create(User user) {
+        return new UserDto(user.getName(), user.getEmail(), user.getPassword());
+    }
+
+    public void update(UserDto userDto) {
+        User model = new User(userDto.getName(), userDto.getEmail(), userDto.getPassword());
+        repository.save(model);
+    }
+
+    public void delete(Integer id) {
+        repository.delete(id);
+    }
+
+    public UserDto findOne(Integer id) {
+        User user = repository.findOne(id);
+        return new UserDto(user.getName(), user.getEmail(), user.getOrders());
+    }
+
+    public List<UserDto> findAll() {
+        List<UserDto> users = new ArrayList<>();
+        for (User user : repository.findAll())
+            users.add(new UserDto(user.getName(), user.getEmail(), user.getOrders()));
+        return users;
     }
 }

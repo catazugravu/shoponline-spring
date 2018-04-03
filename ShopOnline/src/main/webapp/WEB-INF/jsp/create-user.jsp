@@ -25,10 +25,13 @@
         </button>
     </div>
 </c:if>
-<form:form modelAttribute="loginFormUser" action="/user/login" method="post" class="form-signin">
+<form:form modelAttribute="userDto" action="/user/create" method="post" class="form-signin">
     <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
     <label for="email" class="sr-only">Email address</label>
+    <form:input path="name" type="name" id="inputName" class="form-control" placeholder="Name"
+                required="required" autofocus="autofocus"/>
+
     <form:input path="email" type="email" id="inputEmail" class="form-control" placeholder="Email address"
                 required="required" autofocus="autofocus"/>
 
@@ -36,9 +39,8 @@
     <form:input path="password" type="password" id="inputPassword" class="form-control" placeholder="Password"
                 required="required"/>
 
-    <button type="submit" class="btn btn-lg btn-primary btn-block">Log in</button>
-    <c:url var="register" value="create"/>
-    <a href="<c:out value="${register}"/>">Register</a>
+    <button type="submit" class="btn btn-lg btn-primary btn-block">Create</button>
+    <button type="reset" class="btn btn-lg btn-primary btn-block">Clear</button>
     <p class="mt-5 mb-3 text-muted">&copy;2018</p>
 </form:form>
 
