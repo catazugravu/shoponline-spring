@@ -1,16 +1,11 @@
 package com.iquest.shoponline.services;
 
+import com.iquest.shoponline.constants.OrderStatus;
 import com.iquest.shoponline.dto.cart.CartDto;
 import com.iquest.shoponline.dto.cartItem.CartItemDto;
 import com.iquest.shoponline.dto.user.UserDto;
-import com.iquest.shoponline.model.Cart;
-import com.iquest.shoponline.model.CartItem;
-import com.iquest.shoponline.model.Product;
-import com.iquest.shoponline.model.User;
-import com.iquest.shoponline.repository.CartItemRepository;
-import com.iquest.shoponline.repository.CartRepository;
-import com.iquest.shoponline.repository.ProductRepository;
-import com.iquest.shoponline.repository.UserRepository;
+import com.iquest.shoponline.model.*;
+import com.iquest.shoponline.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +26,35 @@ public class CartService {
     ProductRepository productRepository;
 
     @Autowired
+    OrderRepository orderRepository;
+
+    @Autowired
+    OrderItemRepository orderItemRepository;
+
+    @Autowired
     UserRepository userRepository;
+
+    public void createOrderFor(Integer userId, String deliveryAddress) {
+        User user = userRepository.findOne(userId);
+        Order order = new Order(user, deliveryAddress, new java.sql.Date(new Date().getTime()), OrderStatus.PENDING.ordinal());
+        order = orderRepository.save(order);
+
+        Cart cart = cartRepository.findFirstCartByUserId(userId);
+        for (CartItem item : cart.getItems()) {
+            Product product = item.getProduct();
+
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrder(order);
+            orderItem.setProduct(product);
+            orderItem.setQuantity(item.getQuantity());
+            orderItemRepository.save(orderItem);
+
+            product.setStock(product.getStock() - item.getQuantity());
+            productRepository.save(product);
+        }
+
+        cartRepository.delete(cart);
+    }
 
     public void updateItemQuantityFor(CartDto cart, Integer productId, Integer quantity) {
         for (CartItemDto item : cart.getItems()) {
@@ -92,6 +115,8 @@ public class CartService {
             } else {
                 product = productRepository.findFirstById(itemDto.getProductId());
             }
+
+            itemDto.setProductId(product.getId());
 
             Cart cart = cartRepository.findFirstCartByUserId(userId);
             if (cart == null) {

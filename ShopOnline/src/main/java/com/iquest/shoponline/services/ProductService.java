@@ -39,6 +39,7 @@ public class ProductService {
         dto.setDescription(product.getDescription());
         dto.setPrice(product.getPrice());
         dto.setImgPath1(product.getImgPath1());
+        dto.setDescription(product.getDescription());
 
         dtos.add(dto);
     }

@@ -1,6 +1,6 @@
 <%@ taglib prefix='c' uri='http://java.sun.com/jsp/jstl/core' %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<c:set var="sessionUser" value="${sessionScope.sessionUser }"/>
+<c:set var="sessionUser" value="${sessionScope.sessionUser}"/>
 <!doctype html>
 <html lang="en">
 <head>
@@ -13,24 +13,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css"
+          integrity="sha384-3AB7yXWz4OeoZcPbieVW64vVXEwADiYyAEhwilzWsLw+9FgqpyjjStpPnpBO8o8S" crossorigin="anonymous">
     <link rel="stylesheet" href="../../resources/css/style.css">
 </head>
 
 <body>
-
-<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-    <h5 class="my-0 mr-md-auto font-weight-normal">iQuest - Advanced Frameworks - 2018</h5>
-    <nav class="my-2 my-md-0 mr-md-3"><a class="p-2 text-dark" href="#">Cart()</a></nav>
-
-    <c:if test="${empty sessionUser}">
-        <a class="btn btn-outline-primary" href="/user/login">Login</a>
-    </c:if>
-    <c:if test="${not empty sessionUser}">
-        <h6>Welcome ${sessionUser.name}</h6>
-        <a class="btn btn-outline-primary" href="/user/logout">Logout</a>
-    </c:if>
-
-</div>
+<jsp:include page="header.jsp"></jsp:include>
 
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <h1 class="display-4">Online Shop</h1>
@@ -58,7 +47,7 @@
                 <tr>
                     <td>${item.name}</td>
                     <td>
-                        <form:form modelAttribute="cartItem" action="/cart/${cartId}/item/${item.id}" method="post"
+                        <form:form modelAttribute="cartItem" action="/cart/update/${item.productId}" method="post"
                                    class="text-center">
                             <form:select path="quantity" class="custom-select custom-select-lg mb-3"
                                          onchange="this.form.submit()">
@@ -72,33 +61,49 @@
                     </td>
                     <td>${item.price} RON</td>
                     <td>
-                        <form:form action="cart/${cartId}/item/${item.id}" method="delete">
+                        <form:form action="/cart/${item.productId}" method="delete">
                             <button type="submit" class="btn btn-danger btn-lg">Remove</button>
                         </form:form>
                     </td>
                 </tr>
             </c:forEach>
+            <tr>
+                <td class="col-md-auto font-weight-bold" colspan="2">Total</td>
+                <td>${total} RON</td>
+            </tr>
             </tbody>
         </table>
-    </c:if>
 
-    <footer class="pt-4 my-md-5 pt-md-5 border-top">
-        <div class="row">
-            <div class="col-12 col-md">
-                <small class="d-block mb-3 text-muted">&copy;2018</small>
-            </div>
-            <div class="col-6 col-md">
-                <h5>Products</h5>
-                <ul class="list-unstyled text-small">
-                    <li><a class="text-muted" href="#">All products</a></li>
-                    <li><a class="text-muted" href="#">Best sellers</a></li>
-                    <li><a class="text-muted" href="#">New arrivals</a></li>
-                </ul>
+        <div class="row mt-5">
+            <div class="col-sm-12 col-md-6 offset-md-3">
+                <form:form modelAttribute="addressForm" action="/cart/checkout" method="post">
+                <div class="input-group mb-5">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-globe"></i></span>
+                    </div>
+                    <form:input path="address" type="text" class="form-control"
+                                placeholder="Please enter your delivery address" required="required"/>
+                </div>
             </div>
 
+            <div class="col-sm-12 col-md-4 offset-md-4">
+                <c:if test="${not empty sessionUser.id}">
+                    <button class="btn btn-success btn-lg btn-block" type="submit">
+                        Checkout <i class="fas fa-shipping-fast pd-2"></i>
+                    </button>
+                </c:if>
+                <c:if test="${empty sessionUser.id}">
+                    <button class="btn btn-success btn-lg btn-block" onclick="location.href='/user/login'">
+                        Checkout <i class="fas fa-shipping-fast pd-2"></i>
+                    </button>
+                </c:if>
+                </form:form>
+            </div>
         </div>
-    </footer>
+    </c:if>
 </div>
+
+<jsp:include page="footer.jsp"></jsp:include>
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

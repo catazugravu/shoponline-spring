@@ -6,4 +6,5 @@ public class Views {
     public static final String CART_PAGE = "cart";
     public static final String PRODUCT_PAGE = "product";
     public static final String PRODUCT_INFO_PAGE = "product-info";
+    public static final String ORDER_SUCCESSFUL = "order-successful";
 }

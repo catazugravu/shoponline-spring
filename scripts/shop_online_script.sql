@@ -41,8 +41,8 @@ CREATE TABLE `products` (
 	PRIMARY KEY (`id`)
 );
 
-DROP TABLE IF EXISTS `order`;
-CREATE TABLE `order` (
+DROP TABLE IF EXISTS `orders`;
+CREATE TABLE `orders` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`user_id` INT(11) NOT NULL,
 	`delivery_address` varchar(50) NOT NULL,
@@ -75,9 +75,9 @@ ALTER TABLE `cart_items` ADD CONSTRAINT `cart_items_fk1` FOREIGN KEY (`product_i
 
 ALTER TABLE `products` ADD CONSTRAINT `products_fk0` FOREIGN KEY (`category_id`) REFERENCES `category`(`id`);
 
-ALTER TABLE `order` ADD CONSTRAINT `order_fk0` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`);
+ALTER TABLE `orders` ADD CONSTRAINT `order_fk0` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`);
 
-ALTER TABLE `order_item` ADD CONSTRAINT `order_item_fk0` FOREIGN KEY (`order_id`) REFERENCES `order`(`id`);
+ALTER TABLE `order_item` ADD CONSTRAINT `order_item_fk0` FOREIGN KEY (`order_id`) REFERENCES `orders`(`id`);
 
 ALTER TABLE `order_item` ADD CONSTRAINT `order_item_fk1` FOREIGN KEY (`product_id`) REFERENCES `products`(`id`);
 
